@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { ShieldCheck, Check } from "lucide-react";
+import { ShieldCheck, Check, ShieldAlert, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
-
+import { Badge } from "@/components/ui/badge";
 const TABS = [
   { id: "network", label: "Network Policies" },
   { id: "ratelimit", label: "Rate Limiting" },
@@ -84,8 +84,8 @@ export default function PoliciesPage() {
               onClick={() => setActiveTab(tab.id)}
               className={cn(
                 "w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                activeTab === tab.id 
-                  ? "bg-white text-black shadow-sm" 
+                activeTab === tab.id
+                  ? "bg-white text-black shadow-sm"
                   : "text-zinc-400 hover:text-white hover:bg-white/5"
               )}
             >
@@ -96,7 +96,7 @@ export default function PoliciesPage() {
 
         {/* Content Area */}
         <div className="flex-1 overflow-y-auto pr-4 scrollbar-hide pb-20">
-          
+
           {/* A · Network Policies */}
           {activeTab === "network" && (
             <Card className="border-white/10">
@@ -107,26 +107,26 @@ export default function PoliciesPage() {
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <Label>IP Allow List (Comma separated)</Label>
-                  <Input 
-                    value={localSettings.network.allowList} 
-                    onChange={(e) => handleChange("network", "allowList", e.target.value)} 
-                    placeholder="192.168.1.1, 10.0.0.0/24" 
+                  <Input
+                    value={localSettings.network.allowList}
+                    onChange={(e) => handleChange("network", "allowList", e.target.value)}
+                    placeholder="192.168.1.1, 10.0.0.0/24"
                     className="bg-zinc-900 border-white/10"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label>IP Deny List</Label>
-                  <Input 
-                    value={localSettings.network.denyList} 
-                    onChange={(e) => handleChange("network", "denyList", e.target.value)} 
-                    placeholder="203.0.113.0/24" 
+                  <Input
+                    value={localSettings.network.denyList}
+                    onChange={(e) => handleChange("network", "denyList", e.target.value)}
+                    placeholder="203.0.113.0/24"
                     className="bg-zinc-900 border-white/10"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label>Geo Blocking</Label>
-                  <Input 
-                    placeholder="e.g. RU, CN, KP" 
+                  <Input
+                    placeholder="e.g. RU, CN, KP"
                     className="bg-zinc-900 border-white/10"
                   />
                 </div>
@@ -149,7 +149,7 @@ export default function PoliciesPage() {
                   </div>
                   <Switch checked={localSettings.rateLimit.enabled} onChange={() => handleToggle("rateLimit", "enabled")} />
                 </div>
-                
+
                 <div className="space-y-4 pt-2">
                   <div className="flex justify-between">
                     <Label>Requests per Second</Label>
@@ -173,7 +173,7 @@ export default function PoliciesPage() {
 
                 <div className="space-y-2">
                   <Label>Retry-After Behavior</Label>
-                  <select 
+                  <select
                     value={localSettings.rateLimit.retryAfter}
                     onChange={(e) => handleChange("rateLimit", "retryAfter", e.target.value)}
                     className="flex h-9 w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-1 text-sm text-white"
@@ -219,7 +219,7 @@ export default function PoliciesPage() {
                       <option value="high">High (Maximum Security)</option>
                     </select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label className="text-destructive">Action on Threat</Label>
                     <select value={localSettings.threat.action} onChange={(e) => handleChange("threat", "action", e.target.value)} className="flex h-9 w-full rounded-md border border-destructive/50 bg-destructive/10 px-3 py-1 text-sm text-white">
@@ -233,7 +233,7 @@ export default function PoliciesPage() {
                     <Label>Auto-ban Malicious IPs</Label>
                     <Switch checked={localSettings.threat.autoBan} onChange={() => handleToggle("threat", "autoBan")} />
                   </div>
-                  
+
                   {localSettings.threat.autoBan && (
                     <div className="space-y-2 pl-4 border-l-2 border-white/10">
                       <Label>Ban Duration</Label>
@@ -263,7 +263,7 @@ export default function PoliciesPage() {
                 {/* PQC Visualizer */}
                 <div className="w-full p-6 bg-black/50 border border-white/5 rounded-xl flex flex-col md:flex-row items-center justify-between relative overflow-hidden mb-8 gap-8">
                   <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/10 to-transparent opacity-80" />
-                  
+
                   {/* Classical RSA */}
                   <div className="flex-1 flex flex-col items-center gap-4 relative z-10 w-full">
                     <div className="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-2">Classical (RSA-2048)</div>
@@ -272,7 +272,7 @@ export default function PoliciesPage() {
                       <div className="absolute left-0 h-full w-full bg-[linear-gradient(90deg,transparent,rgba(239,68,68,0.2),transparent)] animate-[shimmer_2s_infinite]" />
                       <span className="font-mono text-xs text-zinc-500 line-through">4f8a9...b2c1</span>
                     </div>
-                    <Badge variant="outline" className="bg-red-500/10 text-red-400 border-red-500/20 gap-1 mt-2">
+                    <Badge className="bg-red-500/10 text-red-400 border-red-500/20 gap-1 mt-2">
                       <ShieldAlert className="w-3 h-3" /> Quantum Vulnerable
                     </Badge>
                   </div>
@@ -296,11 +296,11 @@ export default function PoliciesPage() {
                         KYBER-768::LOCKED
                       </span>
                     </div>
-                    <Badge variant="outline" className="bg-purple-500/10 text-purple-400 border-purple-500/30 gap-1 mt-2 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
+                    <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/30 gap-1 mt-2 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
                       <ShieldCheck className="w-3 h-3" /> Quantum Resistant
                     </Badge>
                   </div>
-                  
+
                   <style jsx>{`
                     @keyframes shimmer {
                       0% { transform: translateX(-100%); }
@@ -350,22 +350,22 @@ export default function PoliciesPage() {
                     <Switch checked={localSettings.identity.tokenExpiry} onChange={() => handleToggle("identity", "tokenExpiry")} />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2 pt-4 border-t border-white/10">
                   <Label>Allowed Roles</Label>
                   <div className="flex flex-wrap gap-2">
                     {["admin", "service", "internal", "customer", "viewer"].map(role => (
                       <label key={role} className="flex items-center gap-2 bg-zinc-900 px-3 py-1.5 rounded-md border border-white/10 cursor-pointer hover:bg-white/5">
-                        <input 
-                          type="checkbox" 
+                        <input
+                          type="checkbox"
                           checked={localSettings.identity.allowedRoles.includes(role)}
                           onChange={(e) => {
-                            const newRoles = e.target.checked 
+                            const newRoles = e.target.checked
                               ? [...localSettings.identity.allowedRoles, role]
                               : localSettings.identity.allowedRoles.filter((r: string) => r !== role);
                             handleChange("identity", "allowedRoles", newRoles);
                           }}
-                          className="accent-white" 
+                          className="accent-white"
                         />
                         <span className="text-sm font-mono text-zinc-300">{role}</span>
                       </label>
@@ -385,11 +385,11 @@ export default function PoliciesPage() {
                 <CardDescription>Micro-segmentation and service mesh policies.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                
+
                 {/* Interactive Architecture SVG Visualizer */}
                 <div className="w-full py-8 bg-black/50 border border-white/5 rounded-xl flex items-center justify-center relative overflow-hidden mb-6">
                   <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-900/10 to-transparent opacity-80" />
-                  
+
                   <div className="flex items-center gap-12 sm:gap-24 relative z-10 w-full max-w-2xl px-8">
                     {/* Frontend Node */}
                     <div className="flex flex-col items-center gap-2 z-10">
@@ -428,7 +428,7 @@ export default function PoliciesPage() {
                       <span className="text-xs font-mono text-zinc-500">Database</span>
                     </div>
                   </div>
-                  
+
                   <style jsx>{`
                     @keyframes slideRight {
                       0% { left: 0%; opacity: 0; }
@@ -452,7 +452,7 @@ export default function PoliciesPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Allowed Service Paths</Label>
-                  <textarea 
+                  <textarea
                     className="w-full bg-zinc-900 border border-white/10 rounded-md p-3 text-sm font-mono text-zinc-300 min-h-[100px] focus:outline-none focus:ring-1 focus:ring-white"
                     placeholder="frontend -> backend&#10;api -> db"
                     defaultValue={"frontend -> backend\napi -> db\nauth-service -> cache"}
@@ -475,29 +475,29 @@ export default function PoliciesPage() {
                   "flex items-start gap-4 p-4 rounded-lg border cursor-pointer transition-colors",
                   localSettings.mode.type === "monitor" ? "border-white bg-white/5" : "border-white/10 bg-zinc-900/50"
                 )}>
-                  <input 
-                    type="radio" 
-                    name="mode" 
-                    checked={localSettings.mode.type === "monitor"} 
+                  <input
+                    type="radio"
+                    name="mode"
+                    checked={localSettings.mode.type === "monitor"}
                     onChange={() => handleChange("mode", "type", "monitor")}
-                    className="mt-1 accent-white" 
+                    className="mt-1 accent-white"
                   />
                   <div>
                     <h4 className="font-medium text-white">Monitor Mode</h4>
                     <p className="text-sm text-zinc-400">Policies are evaluated and logged, but no traffic is blocked. Use this for testing.</p>
                   </div>
                 </label>
-                
+
                 <label className={cn(
                   "flex items-start gap-4 p-4 rounded-lg border cursor-pointer transition-colors",
                   localSettings.mode.type === "enforce" ? "border-destructive bg-destructive/10" : "border-white/10 bg-zinc-900/50"
                 )}>
-                  <input 
-                    type="radio" 
-                    name="mode" 
-                    checked={localSettings.mode.type === "enforce"} 
+                  <input
+                    type="radio"
+                    name="mode"
+                    checked={localSettings.mode.type === "enforce"}
                     onChange={() => handleChange("mode", "type", "enforce")}
-                    className="mt-1 accent-destructive" 
+                    className="mt-1 accent-destructive"
                   />
                   <div>
                     <h4 className="font-medium text-destructive">Enforce Mode</h4>
@@ -553,8 +553,8 @@ export default function PoliciesPage() {
 
       {/* Sticky Bottom Footer for Save Button */}
       <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10 bg-zinc-950/80 backdrop-blur-md flex justify-end px-8 z-10">
-        <Button 
-          onClick={handleSave} 
+        <Button
+          onClick={handleSave}
           disabled={isSaving}
           className="bg-white text-black hover:bg-zinc-200 min-w-[150px] font-medium"
         >
